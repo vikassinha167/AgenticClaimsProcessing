@@ -26,10 +26,10 @@ class ExternalFraudApiClient:
                 for item in coding_result.mapped_items
             ],
         }
-        headers = {
-            "Authorization": f"Bearer {self.settings.fraud_api_key}",
-            "Content-Type": "application/json",
-        }
+        headers = {"Content-Type": "application/json"}
+        if self.settings.fraud_api_key:
+            headers["Authorization"] = f"Bearer {self.settings.fraud_api_key}"
+
         response = requests.post(self.settings.fraud_api_url, json=payload, headers=headers, timeout=10)
         response.raise_for_status()
         self.logger.debug("Fraud API response: %s", response.text)

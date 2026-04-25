@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Any
 
 from azure.ai.formrecognizer import DocumentAnalysisClient
-from azure.core.credentials import AzureKeyCredential
+from azure.identity import DefaultAzureCredential
 
 from app.config import Settings
 
@@ -15,8 +15,8 @@ class DocumentIntelligenceClient:
         self.logger = logging.getLogger("DocumentIntelligenceClient")
         self.settings = settings
         self.client = DocumentAnalysisClient(
-            endpoint=str(settings.azure_form_recognizer_endpoint),
-            credential=AzureKeyCredential(settings.azure_form_recognizer_key),
+            endpoint=str(settings.foundry_endpoint),
+            credential=DefaultAzureCredential(),
         )
 
     async def extract_from_document(self, document_path: str | None) -> tuple[str, dict[str, Any]]:

@@ -4,6 +4,7 @@ import logging
 from typing import Any
 
 import requests
+from azure.identity import DefaultAzureCredential
 
 from app.config import Settings
 
@@ -14,8 +15,14 @@ class FoundryClient:
         self.settings = settings
         self.base_url = str(settings.foundry_endpoint).rstrip("/")
         self.project_id = settings.foundry_project_id
-        self.headers = {
-            "Authorization": f"Bearer {self.settings.foundry_api_key}",
+        self.credential = DefaultAzureCredential()
+        self.scope = settings.foundry_scope
+
+    @property
+    def headers(self) -> dict[str, str]:
+        token = self.credential.get_token(self.scope).token
+        return {
+            "Authorization": f"Bearer {token}",
             "Content-Type": "application/json",
         }
 

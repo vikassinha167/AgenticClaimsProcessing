@@ -57,8 +57,8 @@ flowchart TD
 
 - `app/tools/foundry_sdk.py` — logs traces and evaluations to Foundry.
 - `app/tools/foundry_guardrails.py` — executes Foundry guardrail evaluations.
-- `app/tools/openai_client.py` — invokes the Foundry-hosted LLM deployment.
-- `app/tools/document_intelligence.py` — uses Azure Document Intelligence for extraction.
+- `app/tools/openai_client.py` — invokes Azure AI Services-hosted OpenAI deployment.
+- `app/tools/document_intelligence.py` — uses Foundry-hosted Document Intelligence.
 - `app/tools/ai_search.py` — queries Azure AI Search for fraud patterns.
 - `app/tools/rules_engine.py` — fetches MCP policy and validates claims.
 - `app/tools/external_fraud_api.py` — sends claim data to the fraud scoring endpoint.
@@ -88,33 +88,33 @@ flowchart TD
 ## Required Azure Resources
 
 - Azure AI Foundry project
-- Azure AI Foundry-hosted LLM model deployment (e.g. `gpt-4o`)
-- Azure Document Intelligence / Form Recognizer resource
+- Azure AI Services endpoint for OpenAI and Search with Azure AD auth
+- Azure AI Foundry endpoint for Document Intelligence and guardrail evaluation
 - Azure Cognitive Search service
 - Azure AI Search index for fraud/suspicion patterns
-- Optional: Azure AI Foundry Guardrails configured in the Foundry project
+- Optional: Foundry Guardrails configured in the Foundry project
 
 ## Environment Configuration
 
 Create `.env` from `.env.example` and populate:
 
 ```text
+AZURE_AI_SERVICES_ENDPOINT=https://<your-ai-services-endpoint>.cognitiveservices.azure.com/
 AZURE_OPENAI_DEPLOYMENT=gpt-4o
+AZURE_SEARCH_ENDPOINT=https://<your-search-service>.search.windows.net
+AZURE_SEARCH_INDEX=healthcare-fraud-index
 AZURE_FOUNDRY_ENDPOINT=https://<your-foundry-endpoint>
 AZURE_FOUNDRY_PROJECT_ID=<your-foundry-project-id>
-AZURE_FOUNDRY_API_KEY=<your-foundry-api-key>
-AZURE_FORM_RECOGNIZER_ENDPOINT=https://<your-formrecognizer-endpoint>.cognitiveservices.azure.com/
-AZURE_FORM_RECOGNIZER_KEY=<your-formrecognizer-key>
-AZURE_SEARCH_ENDPOINT=https://<your-search-service>.search.windows.net
-AZURE_SEARCH_KEY=<your-search-key>
-AZURE_SEARCH_INDEX=healthcare-fraud-index
+AZURE_FOUNDRY_SCOPE=https://cognitiveservices.azure.com/.default
 FRAUD_API_URL=http://127.0.0.1:8000/fraud-score
-FRAUD_API_KEY=YOUR_FRAUD_API_KEY
+FRAUD_API_KEY=
 MCP_HOST=127.0.0.1
 MCP_PORT=8000
 LOG_LEVEL=INFO
 ENVIRONMENT=development
 ```
+
+This project is designed to authenticate to Azure services using `DefaultAzureCredential()` instead of API keys. Ensure you are authenticated in your environment by using Azure CLI, Visual Studio Code Azure sign-in, or managed identity.
 
 ## Execution Checklist
 

@@ -3,8 +3,8 @@ from __future__ import annotations
 import logging
 from typing import List
 
+from azure.identity import DefaultAzureCredential
 from azure.search.documents import SearchClient
-from azure.core.credentials import AzureKeyCredential
 
 from app.config import Settings
 from app.models import CodingResult
@@ -16,7 +16,7 @@ class FraudSearchClient:
         self.client = SearchClient(
             endpoint=str(settings.azure_search_endpoint),
             index_name=settings.azure_search_index,
-            credential=AzureKeyCredential(settings.azure_search_key),
+            credential=DefaultAzureCredential(),
         )
 
     async def query_patterns(self, coding_result: CodingResult) -> List[str]:
