@@ -20,7 +20,7 @@ AgenticClaimsProcessing is a production-grade Azure AI Foundry-centered healthca
 | LLM | Azure OpenAI | `app.tools.openai_client.py` | Uses GPT-4o deployment and prompt templates.
 | Document Extraction | Azure Document Intelligence | `app.tools.document_intelligence.py` | Extracts structured claim fields from document assets.
 | RAG / Search | Azure AI Search | `app.tools.ai_search.py` | Retrieves fraud pattern evidence for risk assessment.
-| Responsible AI | Azure Content Safety | `app.tools.content_safety.py` | Enforces content guardrails and safety checks.
+| Responsible AI | Azure AI Foundry Guardrails | `app.tools.foundry_guardrails.py` | Enforces guardrails and safety policy evaluation through Foundry.
 | Control Plane | Azure AI Foundry | `app.tools.foundry_sdk.py` | Registers agents and logs trace/evaluation artifacts.
 | Policy Rules | MCP Server | `app/mcp/server.py` | Serves policy definitions as a centralized rules endpoint.
 
@@ -59,12 +59,12 @@ AgenticClaimsProcessing is a production-grade Azure AI Foundry-centered healthca
    - Set `AZURE_SEARCH_ENDPOINT`, `AZURE_SEARCH_KEY`, and `AZURE_SEARCH_INDEX`.
 
 5. Configure Responsible AI guardrails:
-   - Provision Azure Content Safety if available.
-   - Set `AZURE_CONTENT_SAFETY_ENDPOINT` and `AZURE_CONTENT_SAFETY_KEY`.
+   - Prefer Azure AI Foundry Guardrails for centralized evaluation.
 
 6. External Fraud Scoring API:
    - Configure a real or mock API endpoint with a bearer key.
    - Set `FRAUD_API_URL` and `FRAUD_API_KEY`.
+   - For local development, you can use the MCP server mock endpoint at `http://127.0.0.1:8000/fraud-score`.
 
 7. Local MCP server:
    - Start the MCP policy server using `scripts/run_mcp.py`.
@@ -95,7 +95,7 @@ python scripts/eval_run.py
 
 ## Guardrails Implementation
 
-- Content Safety checks are enforced by `app.tools.content_safety.ContentSafetyClient`.
+- Foundry Guardrails checks are enforced by `app.tools.foundry_guardrails.FoundryGuardrailsClient`.
 - Policy and claims rules are centralized in the MCP server under `app/mcp/`.
 - The Critic Agent validates outputs for groundedness and bias.
 

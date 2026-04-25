@@ -19,9 +19,6 @@ class Settings(BaseSettings):
     azure_search_key: str = Field(..., env="AZURE_SEARCH_KEY")
     azure_search_index: str = Field(..., env="AZURE_SEARCH_INDEX")
 
-    azure_content_safety_endpoint: Optional[HttpUrl] = Field(None, env="AZURE_CONTENT_SAFETY_ENDPOINT")
-    azure_content_safety_key: Optional[str] = Field(None, env="AZURE_CONTENT_SAFETY_KEY")
-
     foundry_project_id: str = Field(..., env="AZURE_FOUNDRY_PROJECT_ID")
     foundry_endpoint: HttpUrl = Field(..., env="AZURE_FOUNDRY_ENDPOINT")
     foundry_api_key: str = Field(..., env="AZURE_FOUNDRY_API_KEY")

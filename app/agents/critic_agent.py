@@ -4,7 +4,7 @@ import logging
 
 from app.config import Settings
 from app.models import CriticResult, DecisionResult
-from app.tools.content_safety import ContentSafetyClient
+from app.tools.foundry_guardrails import FoundryGuardrailsClient
 from app.tools.foundry_sdk import FoundryClient
 from app.tools.openai_client import AzureOpenAIClient
 
@@ -18,14 +18,15 @@ class CriticAgent:
     def __init__(self, settings: Settings) -> None:
         self.logger = logging.getLogger("CriticAgent")
         self.openai = AzureOpenAIClient(settings)
-        self.content_safety = ContentSafetyClient(settings)
+        self.guardrails = FoundryGuardrailsClient(settings)
         self.foundry = FoundryClient(settings)
 
     async def review(self, decision_result: DecisionResult, trace: dict[str, object]) -> CriticResult:
         prompt = self._build_prompt(decision_result, trace)
         response = await self.openai.generate(prompt)
         issues = self._parse_issues(response)
-        safe = await self.content_safety.assess(trace)
+        safe, guardrail_issues = await self.guardrails.is_safe(decision_result.claim_id, trace)
+        issues.extend([issue for issue in guardrail_issues if issue not in issues])
         critic = CriticResult(
             claim_id=decision_result.claim_id,
             grounded=not bool(issues),

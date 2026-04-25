@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 from pydantic import BaseModel, Field
 
@@ -28,3 +28,23 @@ class PolicyBundle(BaseModel):
     max_line_item_amount: float
     exceptions: Dict[str, Any] = Field(default_factory=dict)
     rules: List[PolicyRule] = Field(default_factory=list)
+
+
+class FraudScoreItem(BaseModel):
+    procedure_code: Optional[str]
+    amount: float
+    provider: str
+    diagnosis: Optional[str]
+
+
+class FraudScoreRequest(BaseModel):
+    claim_id: str
+    items: List[FraudScoreItem]
+
+
+class FraudScoreResponse(BaseModel):
+    claim_id: str
+    fraud_score: float
+    risk_level: str
+    patterns: List[str]
+    reason: str
