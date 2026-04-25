@@ -5,7 +5,7 @@ import logging
 from app.config import Settings
 from app.models import CodingResult, DecisionOutcome, DecisionResult, FraudResult, ValidationResult
 from app.tools.foundry_sdk import FoundryClient
-from app.tools.openai_client import AzureOpenAIClient
+from app.tools.openai_client import FoundryOpenAIClient
 
 
 class DecisionAgent:
@@ -16,7 +16,7 @@ class DecisionAgent:
 
     def __init__(self, settings: Settings) -> None:
         self.logger = logging.getLogger("DecisionAgent")
-        self.openai = AzureOpenAIClient(settings)
+        self.openai = FoundryOpenAIClient(settings)
         self.foundry = FoundryClient(settings)
 
     async def decide(self, coding_result: CodingResult, validation_result: ValidationResult, fraud_result: FraudResult) -> DecisionResult:

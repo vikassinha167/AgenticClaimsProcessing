@@ -6,7 +6,7 @@ from typing import List
 from app.config import Settings
 from app.models import ClaimItem, ClaimPayload, CodingResult
 from app.tools.foundry_sdk import FoundryClient
-from app.tools.openai_client import AzureOpenAIClient
+from app.tools.openai_client import FoundryOpenAIClient
 
 
 class CodingAgent:
@@ -19,7 +19,7 @@ class CodingAgent:
     def __init__(self, settings: Settings) -> None:
         self.logger = logging.getLogger("CodingAgent")
         self.settings = settings
-        self.openai = AzureOpenAIClient(settings)
+        self.openai = FoundryOpenAIClient(settings)
         self.foundry = FoundryClient(settings)
 
     async def map_codes(self, extraction_result: "app.models.ExtractionResult") -> CodingResult:

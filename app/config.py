@@ -1,15 +1,12 @@
 from __future__ import annotations
 
 import os
-from typing import Optional
 
 from pydantic import BaseSettings, Field, HttpUrl
 
 
 class Settings(BaseSettings):
     # Azure environment
-    azure_openai_endpoint: HttpUrl = Field(..., env="AZURE_OPENAI_ENDPOINT")
-    azure_openai_key: str = Field(..., env="AZURE_OPENAI_KEY")
     azure_openai_deployment: str = Field(..., env="AZURE_OPENAI_DEPLOYMENT")
 
     azure_form_recognizer_endpoint: HttpUrl = Field(..., env="AZURE_FORM_RECOGNIZER_ENDPOINT")

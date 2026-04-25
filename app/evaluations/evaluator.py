@@ -5,13 +5,13 @@ from typing import Any
 
 from app.config import Settings
 from app.models import DecisionResult, EvaluationMetrics
-from app.tools.openai_client import AzureOpenAIClient
+from app.tools.openai_client import FoundryOpenAIClient
 
 
 class EvaluationPipeline:
     def __init__(self, settings: Settings) -> None:
         self.logger = logging.getLogger("EvaluationPipeline")
-        self.openai = AzureOpenAIClient(settings)
+        self.openai = FoundryOpenAIClient(settings)
         self.settings = settings
 
     async def evaluate(self, claim_id: str, trace: dict[str, Any]) -> EvaluationMetrics:

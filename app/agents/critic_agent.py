@@ -6,7 +6,7 @@ from app.config import Settings
 from app.models import CriticResult, DecisionResult
 from app.tools.foundry_guardrails import FoundryGuardrailsClient
 from app.tools.foundry_sdk import FoundryClient
-from app.tools.openai_client import AzureOpenAIClient
+from app.tools.openai_client import FoundryOpenAIClient
 
 
 class CriticAgent:
@@ -17,7 +17,7 @@ class CriticAgent:
 
     def __init__(self, settings: Settings) -> None:
         self.logger = logging.getLogger("CriticAgent")
-        self.openai = AzureOpenAIClient(settings)
+        self.openai = FoundryOpenAIClient(settings)
         self.guardrails = FoundryGuardrailsClient(settings)
         self.foundry = FoundryClient(settings)
 
