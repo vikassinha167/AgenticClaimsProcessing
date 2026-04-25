@@ -1,0 +1,36 @@
+from __future__ import annotations
+
+import logging
+from typing import Any
+
+import requests
+
+from app.config import Settings
+
+
+class ExternalFraudApiClient:
+    def __init__(self, settings: Settings) -> None:
+        self.logger = logging.getLogger("ExternalFraudApiClient")
+        self.settings = settings
+
+    async def score_claim(self, coding_result: "app.models.CodingResult") -> dict[str, Any]:
+        payload = {
+            "claim_id": coding_result.claim_id,
+            "items": [
+                {
+                    "procedure_code": item.procedure_code,
+                    "amount": item.amount,
+                    "provider": item.provider,
+                    "diagnosis": item.diagnosis,
+                }
+                for item in coding_result.mapped_items
+            ],
+        }
+        headers = {
+            "Authorization": f"Bearer {self.settings.fraud_api_key}",
+            "Content-Type": "application/json",
+        }
+        response = requests.post(self.settings.fraud_api_url, json=payload, headers=headers, timeout=10)
+        response.raise_for_status()
+        self.logger.debug("Fraud API response: %s", response.text)
+        return response.json()

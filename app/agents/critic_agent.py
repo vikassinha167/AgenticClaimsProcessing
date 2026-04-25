@@ -1,0 +1,60 @@
+from __future__ import annotations
+
+import logging
+
+from app.config import Settings
+from app.models import CriticResult, DecisionResult
+from app.tools.content_safety import ContentSafetyClient
+from app.tools.foundry_sdk import FoundryClient
+from app.tools.openai_client import AzureOpenAIClient
+
+
+class CriticAgent:
+    SYSTEM_PROMPT = (
+        "You are the Critic Agent. Validate the final decision for groundedness, relevance, and safety. "
+        "Highlight any issues or biased assertions and ensure the response follows healthcare responsible AI guidelines."
+    )
+
+    def __init__(self, settings: Settings) -> None:
+        self.logger = logging.getLogger("CriticAgent")
+        self.openai = AzureOpenAIClient(settings)
+        self.content_safety = ContentSafetyClient(settings)
+        self.foundry = FoundryClient(settings)
+
+    async def review(self, decision_result: DecisionResult, trace: dict[str, object]) -> CriticResult:
+        prompt = self._build_prompt(decision_result, trace)
+        response = await self.openai.generate(prompt)
+        issues = self._parse_issues(response)
+        safe = await self.content_safety.assess(trace)
+        critic = CriticResult(
+            claim_id=decision_result.claim_id,
+            grounded=not bool(issues),
+            relevant=True,
+            safe=safe,
+            issues=issues,
+            reviewer_notes=response,
+        )
+        await self.foundry.log_trace(decision_result.claim_id, "critic_review", critic.dict())
+        return critic
+
+    def _build_prompt(self, decision_result: DecisionResult, trace: dict[str, object]) -> str:
+        return (
+            f"{self.SYSTEM_PROMPT}\n"
+            f"Decision: {decision_result.decision}\n"
+            f"Rationale: {decision_result.rationale}\n"
+            f"Trace: {trace}\n"
+            "Return a list of any issues in JSON format."
+        )
+
+    def _parse_issues(self, response: str) -> list[str]:
+        import json
+
+        try:
+            payload = json.loads(response)
+            if isinstance(payload, list):
+                return [str(item) for item in payload]
+            if isinstance(payload, dict) and "issues" in payload:
+                return [str(item) for item in payload["issues"]]
+        except Exception:
+            self.logger.warning("Unable to parse critic issues from response")
+        return []
