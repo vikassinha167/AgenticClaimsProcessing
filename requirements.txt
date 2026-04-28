@@ -1,8 +1,10 @@
 fastapi>=0.108.0
 uvicorn[standard]>=0.24.0
-pydantic>=2.9.0
-azure-ai-openai>=1.0.0
-azure-ai-formrecognizer>=4.0.0
+pydantic
+# ---- Azure AI Foundry / OpenAI ----
+openai>=1.40.0
+azure-ai-projects>=1.0.0b5
+azure-ai-evaluation>=1.0.0
 azure-search-documents>=11.0.0
 azure-identity>=1.15.0
 requests>=2.31.0

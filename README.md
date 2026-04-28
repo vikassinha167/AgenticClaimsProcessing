@@ -127,12 +127,62 @@ This project is designed to authenticate to Azure services using `DefaultAzureCr
 
 ## Step-by-Step Run Instructions
 
-### 1. Install dependencies
+## 1. Creating Virtual Environment and Installing all dependencies - Step by step instructions
 
-```bash
-python -m pip install -r requirements.txt
-```
+### Open the Terminal in VS Code:
 
+In your Codespace, open the integrated terminal (View > Terminal or Ctrl+`).
+Navigate to Your Project Root (if not already there):
+
+cd /workspaces/AgenticClaimsProcessing
+
+### Create the Virtual Environment:
+
+Run the following command to create a virtual environment named .venv in your project folder:
+
+python -m venv .venv
+
+This creates a .venv/ directory in your project root with the isolated environment.
+
+### Activate the Virtual Environment:
+
+source .venv/bin/activate
+
+Your terminal prompt should now show (.venv) at the beginning, indicating it's active.
+
+### Install Dependencies (if applicable):
+
+Run following command to install all dependencies - 
+
+pip install -r requirements.txt
+
+### Deactivate When Done (optional):
+
+To exit the virtual environment:
+
+deactivate
+
+## Additional Notes
+1. The .venv/ folder should be added to your .gitignore to avoid committing it to Git.
+2. In GitHub Codespaces, Python 3 is typically pre-installed, but if you encounter issues, run python --version to confirm.
+---------------------------------------------------------------------------------------
+
+### Install Azure CLI 
+
+Run following command in terminal after activating your .venv
+
+curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+
+Check the installed version of az
+
+az version
+
+Once the above command shows azure-cli version, type in below command 
+
+az login
+
+This will open a browser and ask you to sign in by pasting the code which it generates and then caches the credentials locally.
+---------------------------------------------------------------------------------------
 ### 2. Configure `.env`
 
 Copy `.env.example` to `.env` and update values for your environment.
