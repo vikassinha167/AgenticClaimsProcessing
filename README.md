@@ -89,7 +89,8 @@ flowchart TD
 
 - Azure AI Foundry project
 - Azure AI Services endpoint for OpenAI and Search with Azure AD auth
-- Azure AI Foundry endpoint for Document Intelligence and guardrail evaluation
+- Azure AI Foundry endpoint for guardrail evaluation and agent registration
+- Azure Document Intelligence endpoint for document extraction
 - Azure Cognitive Search service
 - Azure AI Search index for fraud/suspicion patterns
 - Optional: Foundry Guardrails configured in the Foundry project
@@ -103,9 +104,18 @@ AZURE_AI_SERVICES_ENDPOINT=https://<your-ai-services-endpoint>.cognitiveservices
 AZURE_OPENAI_DEPLOYMENT=gpt-4o
 AZURE_SEARCH_ENDPOINT=https://<your-search-service>.search.windows.net
 AZURE_SEARCH_INDEX=healthcare-fraud-index
-AZURE_FOUNDRY_ENDPOINT=https://<your-foundry-endpoint>
+AZURE_FOUNDRY_ENDPOINT=https://<your-project-name>.services.ai.azure.com/api/projects/<project-name>
 AZURE_FOUNDRY_PROJECT_ID=<your-foundry-project-id>
 AZURE_FOUNDRY_SCOPE=https://cognitiveservices.azure.com/.default
+AZURE_FOUNDRY_AGENT_VERSION=1
+AZURE_DOCUMENT_INTELLIGENCE_ENDPOINT=https://<your-document-intelligence-instance>.services.ai.azure.com/
+AZURE_DOCUMENT_INTELLIGENCE_KEY_SECRET_NAME=AzureDocumentIntelligenceKey
+AZURE_KEY_VAULT_URL=https://<your-key-vault-name>.vault.azure.net/
+AZURE_KEY_VAULT_CLIENT_ID=
+AZURE_OPENAI_KEY_SECRET_NAME=AzureOpenAIKey
+AZURE_FORM_RECOGNIZER_KEY_SECRET_NAME=AzureFormRecognizerKey
+AZURE_SEARCH_KEY_SECRET_NAME=AzureSearchKey
+AZURE_FOUNDRY_KEY_SECRET_NAME=AzureFoundryKey
 FRAUD_API_URL=http://127.0.0.1:8000/fraud-score
 FRAUD_API_KEY=
 MCP_HOST=127.0.0.1
@@ -114,7 +124,7 @@ LOG_LEVEL=INFO
 ENVIRONMENT=development
 ```
 
-This project is designed to authenticate to Azure services using `DefaultAzureCredential()` instead of API keys. Ensure you are authenticated in your environment by using Azure CLI, Visual Studio Code Azure sign-in, or managed identity.
+This project is designed to authenticate to Azure services using managed identity for Azure Key Vault access. If you are using a user-assigned managed identity, set `AZURE_KEY_VAULT_CLIENT_ID`; otherwise leave it blank for system-assigned managed identity. For local development when managed identity is unavailable, the code falls back to Azure CLI authentication, so run `az login` first.
 
 ## Execution Checklist
 

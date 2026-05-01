@@ -23,7 +23,11 @@ class CriticAgent:
 
     async def review(self, decision_result: DecisionResult, trace: dict[str, object]) -> CriticResult:
         prompt = self._build_prompt(decision_result, trace)
-        response = await self.openai.generate(prompt)
+        response = await self.openai.generate(
+            prompt,
+            agent_name="CriticAgent",
+            agent_version=self.settings.azure_foundry_agent_version,
+        )
         issues = self._parse_issues(response)
         safe, guardrail_issues = await self.guardrails.is_safe(decision_result.claim_id, trace)
         issues.extend([issue for issue in guardrail_issues if issue not in issues])

@@ -17,7 +17,12 @@ class EvaluationPipeline:
     async def evaluate(self, claim_id: str, trace: dict[str, Any]) -> EvaluationMetrics:
         self.logger.debug("Running evaluation for %s", claim_id)
         prompt = self._build_evaluation_prompt(claim_id, trace)
-        response = await self.openai.generate(prompt, max_tokens=600)
+        response = await self.openai.generate(
+            prompt,
+            max_tokens=600,
+            agent_name="EvaluationAgent",
+            agent_version=self.settings.azure_foundry_agent_version,
+        )
         values = self._parse_response(response)
         return EvaluationMetrics(claim_id=claim_id, **values, metadata={"evaluation_text": response})
 

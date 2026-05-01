@@ -3,13 +3,16 @@ from __future__ import annotations
 import asyncio
 import json
 import logging
+import sys
 from pathlib import Path
+
+ROOT_DIR = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT_DIR))
 
 from app.agents.orchestrator import ClaimsOrchestrator
 from app.config import get_settings
-from app.logging import configure_logging
+from app.logger import configure_logging
 from app.models import ClaimPayload
-
 
 async def main() -> None:
     configure_logging()
@@ -26,7 +29,6 @@ async def main() -> None:
     result = await orchestrator.process_claim(sample_claim)
     logger.info("Final decision: %s", result.decision)
     logger.info("Decision trace: %s", json.dumps(result.trace, indent=2))
-
 
 if __name__ == "__main__":
     asyncio.run(main())

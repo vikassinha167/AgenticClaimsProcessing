@@ -22,7 +22,11 @@ class DecisionAgent:
     async def decide(self, coding_result: CodingResult, validation_result: ValidationResult, fraud_result: FraudResult) -> DecisionResult:
         prompt = self._build_prompt(coding_result, validation_result, fraud_result)
         self.logger.debug("DecisionAgent prompt built for %s", coding_result.claim_id)
-        response = await self.openai.generate(prompt)
+        response = await self.openai.generate(
+            prompt,
+            agent_name="DecisionAgent",
+            agent_version=self.settings.azure_foundry_agent_version,
+        )
         decision = self._parse_response(response, coding_result.claim_id)
         await self.foundry.log_trace(coding_result.claim_id, "decision_prompt", {"prompt": prompt, "response": response})
         return decision

@@ -20,13 +20,13 @@ class ProcedureCodeType(str, Enum):
 class ClaimItem(BaseModel):
     item_id: str
     description: str
-    date_of_service: Optional[datetime]
+    date_of_service: Optional[datetime] = None
     amount: float
     provider: str
-    diagnosis: Optional[str]
-    procedure_code: Optional[str]
-    code_type: Optional[ProcedureCodeType]
-    modifiers: Optional[List[str]] = []
+    diagnosis: Optional[str] = None
+    procedure_code: Optional[str] = None
+    code_type: Optional[ProcedureCodeType] = None
+    modifiers: Optional[List[str]] = Field(default_factory=list)
 
 
 class ClaimPayload(BaseModel):

@@ -26,7 +26,11 @@ class CodingAgent:
         claim = extraction_result.claim
         prompt = self._build_prompt(claim)
         self.logger.debug("Sending coding prompt for claim %s", claim.claim_id)
-        response = await self.openai.generate(prompt)
+        response = await self.openai.generate(
+            prompt,
+            agent_name="CodingAgent",
+            agent_version=self.settings.azure_foundry_agent_version,
+        )
         mapped_services = self._parse_response(response)
         await self.foundry.log_trace(claim.claim_id, "coding_prompt", {"prompt": prompt, "response": response})
         return CodingResult(claim_id=claim.claim_id, mapped_items=mapped_services, reasoning=response, confidence=0.88)
