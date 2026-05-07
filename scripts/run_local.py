@@ -23,7 +23,7 @@ async def main() -> None:
     logger.info("Loading sample claim from %s", sample_path)
 
     with sample_path.open("r", encoding="utf-8") as input_file:
-        sample_claim = ClaimPayload.parse_obj(json.load(input_file))
+        sample_claim = ClaimPayload.model_validate(json.load(input_file))
 
     orchestrator = ClaimsOrchestrator(settings)
     result = await orchestrator.process_claim(sample_claim)

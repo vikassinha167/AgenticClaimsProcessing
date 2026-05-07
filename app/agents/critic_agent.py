@@ -55,11 +55,18 @@ class CriticAgent:
         import json
 
         try:
-            payload = json.loads(response)
+            cleaned_response = (
+                                    response
+                                    .replace("```json", "")
+                                    .replace("```", "")
+                                    .strip()
+                                )
+            payload = json.loads(cleaned_response)
             if isinstance(payload, list):
                 return [str(item) for item in payload]
             if isinstance(payload, dict) and "issues" in payload:
                 return [str(item) for item in payload["issues"]]
-        except Exception:
-            self.logger.warning("Unable to parse critic issues from response")
-        return []
+        except Exception as ex:
+            self.logger.error("Error parsing critic issues: %s", ex)
+            self.logger.warning("Failed to parse critic response, falling back to original content")
+            return []

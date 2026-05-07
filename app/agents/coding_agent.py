@@ -50,11 +50,18 @@ class CodingAgent:
 
     def _parse_response(self, response: str) -> List[ClaimItem]:
         import json
-
+    
         try:
-            payload = json.loads(response)
-            services = [ClaimItem.parse_obj(item) for item in payload if isinstance(item, dict)]
+            cleaned_response = (
+                                    response
+                                    .replace("```json", "")
+                                    .replace("```", "")
+                                    .strip()
+                                )
+            payload = json.loads(cleaned_response)
+            services = [ClaimItem.model_validate(item) for item in payload if isinstance(item, dict)]
             return services
-        except Exception:
+        except Exception as ex:
+            self.logger.error("Error parsing coding response: %s", ex)
             self.logger.warning("Failed to parse coding response, falling back to original content")
             return []

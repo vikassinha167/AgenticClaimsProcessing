@@ -45,7 +45,13 @@ class DecisionAgent:
         import json
 
         try:
-            payload = json.loads(response)
+            cleaned_response = (
+                                    response
+                                    .replace("```json", "")
+                                    .replace("```", "")
+                                    .strip()
+                                )
+            payload = json.loads(cleaned_response)
             outcome = DecisionOutcome(payload.get("decision"))
             return DecisionResult(
                 claim_id=claim_id,
@@ -54,7 +60,8 @@ class DecisionAgent:
                 score=float(payload.get("score", 0.0)),
                 trace={},
             )
-        except Exception:
+        except Exception as ex:
+            self.logger.error("Error parsing decision response: %s", ex)
             self.logger.warning("Failed to parse decision response, applying fallback logic")
             return DecisionResult(
                 claim_id=claim_id,
