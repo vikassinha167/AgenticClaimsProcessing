@@ -39,7 +39,13 @@ class EvaluationPipeline:
 
         self.logger.debug("Evaluation response: %s", response)
         try:
-            payload = json.loads(response)
+            cleaned_response = (
+                                    response
+                                    .replace("```json", "")
+                                    .replace("```", "")
+                                    .strip()
+                                )
+            payload = json.loads(cleaned_response)
             return {
                 "groundedness": float(payload.get("groundedness", 0.0)),
                 "relevance": float(payload.get("relevance", 0.0)),

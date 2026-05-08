@@ -86,7 +86,7 @@ class FoundryClient:
         return results
 
     async def log_trace(self, claim_id: str, step: str, payload: dict[str, Any]) -> dict[str, Any]:
-        url = f"{self.base_url}/traces?api-version=2024-05-01-preview"
+        url = f"{self.base_url}/traces"
         body = {"claim_id": claim_id, "step": step, "payload": payload}
         self.logger.debug("Logging Foundry trace: %s %s", claim_id, step)
         response = requests.post(url, json=body, headers=self.headers, timeout=10)

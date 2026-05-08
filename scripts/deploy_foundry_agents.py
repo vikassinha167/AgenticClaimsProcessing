@@ -13,10 +13,10 @@ from app.tools.foundry_sdk import FoundryClient
 
 
 AGENT_REGISTRY = [
-    {"name": "ExtractionAgent", "type": "extraction", "metadata": {"description": "Document Intelligence extraction agent."}},
+    # {"name": "ExtractionAgent", "type": "extraction", "metadata": {"description": "Document Intelligence extraction agent."}},
     {"name": "CodingAgent", "type": "coding", "metadata": {"description": "ICD/CPT mapping and code reasoning agent."}},
-    {"name": "ValidationAgent", "type": "validation", "metadata": {"description": "Policy and rules validation agent."}},
-    {"name": "FraudDetectionAgent", "type": "fraud", "metadata": {"description": "Hybrid fraud detection agent using ML, RAG, and heuristics."}},
+    # {"name": "ValidationAgent", "type": "validation", "metadata": {"description": "Policy and rules validation agent."}},
+    # {"name": "FraudDetectionAgent", "type": "fraud", "metadata": {"description": "Hybrid fraud detection agent using ML, RAG, and heuristics."}},
     {"name": "DecisionAgent", "type": "decision", "metadata": {"description": "Final claim decision agent."}},
     {"name": "CriticAgent", "type": "critic", "metadata": {"description": "Quality and safety review agent."}},
     {"name": "EvaluationAgent", "type": "evaluation", "metadata": {"description": "Claim workflow quality evaluation agent."}},

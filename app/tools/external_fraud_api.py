@@ -18,10 +18,10 @@ class ExternalFraudApiClient:
             "claim_id": coding_result.claim_id,
             "items": [
                 {
-                    "procedure_code": item.procedure_code,
-                    "amount": item.amount,
-                    "provider": item.provider,
-                    "diagnosis": item.diagnosis,
+                    "procedure_code": item["procedure_code"],
+                    "amount": item["amount"],
+                    "provider": item["provider"],
+                    "diagnosis": item["diagnosis"],
                 }
                 for item in coding_result.mapped_items
             ],
