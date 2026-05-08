@@ -32,11 +32,17 @@ class FoundryClient:
 
     @property
     def headers(self) -> dict[str, str]:
-        token = self.foundry_api_key or self._get_fallback_token()
-        return {
-            "Authorization": f"Bearer {token}",
-            "Content-Type": "application/json",
-        }
+        credential = DefaultAzureCredential()
+
+        token = credential.get_token(
+            "https://ai.azure.com/.default"
+        )
+        # token = self.foundry_api_key or self._get_fallback_token()
+        headers = {
+                        "Authorization": f"Bearer {token.token}",
+                        "Content-Type": "application/json"
+                    }
+        return headers
 
     def _get_fallback_token(self) -> str:
         self.logger.debug("Acquiring Azure AD token for Foundry endpoint using DefaultAzureCredential")
@@ -80,7 +86,7 @@ class FoundryClient:
         return results
 
     async def log_trace(self, claim_id: str, step: str, payload: dict[str, Any]) -> dict[str, Any]:
-        url = f"{self.base_url}/projects/{self.project_id}/traces"
+        url = f"{self.base_url}/traces?api-version=2024-05-01-preview"
         body = {"claim_id": claim_id, "step": step, "payload": payload}
         self.logger.debug("Logging Foundry trace: %s %s", claim_id, step)
         response = requests.post(url, json=body, headers=self.headers, timeout=10)
@@ -88,7 +94,7 @@ class FoundryClient:
         return response.json()
 
     async def store_evaluation(self, claim_id: str, metrics: dict[str, Any]) -> dict[str, Any]:
-        url = f"{self.base_url}/projects/{self.project_id}/evaluations"
+        url = f"{self.base_url}/evaluations"
         body = {"claim_id": claim_id, "metrics": metrics}
         self.logger.debug("Storing Foundry evaluation for %s", claim_id)
         response = requests.post(url, json=body, headers=self.headers, timeout=10)

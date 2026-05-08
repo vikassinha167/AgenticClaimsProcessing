@@ -32,5 +32,5 @@ class FraudSearchClient:
         return patterns
 
     def _build_query(self, coding_result: CodingResult) -> str:
-        codes = [item.procedure_code for item in coding_result.mapped_items if item.procedure_code]
+        codes = [item["procedure_code"] for item in coding_result.mapped_items if item["procedure_code"]]
         return " ".join(codes + [coding_result.reasoning])

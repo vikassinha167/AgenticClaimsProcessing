@@ -16,7 +16,8 @@ class FoundryGuardrailsClient:
         self.foundry = FoundryClient(settings)
 
     async def assess_trace(self, claim_id: str, trace: dict[str, Any]) -> dict[str, Any]:
-        url = f"{self.foundry.base_url}/projects/{self.foundry.project_id}/guardrails/evaluate"
+        # url = f"{self.foundry.base_url}/projects/{self.foundry.project_id}/guardrails/evaluate"
+        url = f"{self.foundry.base_url}/guardrails/evaluate"
         payload = {"claim_id": claim_id, "trace": trace}
         self.logger.debug("Calling Foundry guardrails endpoint for claim %s", claim_id)
         response = requests.post(url, json=payload, headers=self.foundry.headers, timeout=15)

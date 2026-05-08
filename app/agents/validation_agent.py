@@ -24,5 +24,5 @@ class ValidationAgent:
         self.logger.debug("ValidationAgent validating claim %s", coding_result.claim_id)
         policy = await self.rules_engine.fetch_policy(coding_result.claim_id)
         validation = await self.rules_engine.validate_claim(coding_result, policy)
-        await self.foundry.log_trace(coding_result.claim_id, "validation_policy", policy)
+        # await self.foundry.log_trace(coding_result.claim_id, "validation_policy", policy)
         return validation

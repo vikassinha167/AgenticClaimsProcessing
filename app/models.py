@@ -4,8 +4,7 @@ from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, Field, HttpUrl
-
+from pydantic import BaseModel, Field, HttpUrl, model_validator
 
 class ClaimSource(str, Enum):
     document = "document"
@@ -20,12 +19,12 @@ class ProcedureCodeType(str, Enum):
 class ClaimItem(BaseModel):
     item_id: str
     description: str
-    date_of_service: Optional[datetime] = None
+    date_of_service: Optional[str] = None
     amount: float
     provider: str
     diagnosis: Optional[str] = None
     procedure_code: Optional[str] = None
-    code_type: Optional[ProcedureCodeType] = None
+    code_type: Optional[str] = None
     modifiers: Optional[List[str]] = Field(default_factory=list)
 
 
@@ -47,7 +46,7 @@ class ExtractionResult(BaseModel):
 
 class CodingResult(BaseModel):
     claim_id: str
-    mapped_items: List[ClaimItem]
+    mapped_items: List[Dict] = []
     reasoning: str
     confidence: float
 
@@ -74,14 +73,12 @@ class DecisionOutcome(str, Enum):
     reject = "reject"
     review = "flag_for_review"
 
-
 class DecisionResult(BaseModel):
     claim_id: str
     decision: DecisionOutcome
     rationale: str
     score: float
     trace: Dict[str, Any] = {}
-
 
 class CriticResult(BaseModel):
     claim_id: str
@@ -90,7 +87,6 @@ class CriticResult(BaseModel):
     safe: bool
     issues: List[str] = []
     reviewer_notes: Optional[str]
-
 
 class EvaluationMetrics(BaseModel):
     claim_id: str

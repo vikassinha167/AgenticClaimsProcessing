@@ -37,5 +37,5 @@ class FraudDetectionAgent:
             confidence=confidence,
             api_response=external,
         )
-        await self.foundry.log_trace(coding_result.claim_id, "fraud_patterns", {"patterns": patterns, "external": external})
+        # await self.foundry.log_trace(coding_result.claim_id, "fraud_patterns", {"patterns": patterns, "external": external})
         return fraud_result

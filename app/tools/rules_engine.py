@@ -27,11 +27,11 @@ class RulesEngine:
         allowed_procedures = set(policy.get("allowed_procedures", []))
 
         for item in coding_result.mapped_items:
-            if item.procedure_code and item.procedure_code not in allowed_procedures:
-                violations.append(f"Unauthorized procedure code {item.procedure_code}")
+            if item["procedure_code"] and item["procedure_code"] not in allowed_procedures:
+                violations.append(f"Unauthorized procedure code {item['procedure_code']}")
 
-            if item.amount > policy.get("max_line_item_amount", 10000):
-                violations.append(f"Line item amount exceeds policy maximum: {item.amount}")
+            if item["amount"] > policy.get("max_line_item_amount", 10000):
+                violations.append(f"Line item amount exceeds policy maximum: {item['amount']}")
 
         valid = not violations
         return ValidationResult(
