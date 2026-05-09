@@ -29,7 +29,6 @@ class DecisionAgent:
             agent_version=self.settings.azure_foundry_agent_version,
         )
         decision = self._parse_response(response, coding_result.claim_id)
-        # await self.foundry.log_trace(coding_result.claim_id, "decision_prompt", {"prompt": prompt, "response": response})
         return decision
 
     def _build_prompt(self, coding_result: CodingResult, validation_result: ValidationResult, fraud_result: FraudResult) -> str:

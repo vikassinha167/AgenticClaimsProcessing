@@ -29,8 +29,8 @@ flowchart TD
     E --> G[Decision Agent]
     F --> G
     G --> H[Critic Agent]
-    H --> I[Foundry Guardrails]
-    H --> J[Trace Logging]
+    H --> I[Guardrails Check]
+    H --> J[Tracing]
     J --> K[Foundry Evaluation]
     subgraph MCP Server
         M1[Policies]
@@ -49,9 +49,10 @@ flowchart TD
 - `Extraction Agent` — normalizes raw claim data.
 - `Coding Agent` — maps service descriptions to ICD/CPT.
 - `Validation Agent` — applies MCP policies.
-- `Fraud Detection Agent` — hybrid fraud risk analysis using Azure Search and fraud scoring.
+- `Fraud Detection Agent` — applies fraud scoring.
 - `Decision Agent` — selects final outcome.
 - `Critic Agent` — applies guardrail and quality review.
+- `Evaluation Agent` — evaluates outcomes.
 
 ### Tooling
 
@@ -59,7 +60,6 @@ flowchart TD
 - `app/tools/foundry_guardrails.py` — executes Foundry guardrail evaluations.
 - `app/tools/openai_client.py` — invokes Azure AI Services-hosted OpenAI deployment.
 - `app/tools/document_intelligence.py` — uses Foundry-hosted Document Intelligence.
-- `app/tools/ai_search.py` — queries Azure AI Search for fraud patterns.
 - `app/tools/rules_engine.py` — fetches MCP policy and validates claims.
 - `app/tools/external_fraud_api.py` — sends claim data to the fraud scoring endpoint.
 
@@ -91,8 +91,6 @@ flowchart TD
 - Azure AI Services endpoint for OpenAI and Search with Azure AD auth
 - Azure AI Foundry endpoint for guardrail evaluation and agent registration
 - Azure Document Intelligence endpoint for document extraction
-- Azure Cognitive Search service
-- Azure AI Search index for fraud/suspicion patterns
 - Optional: Foundry Guardrails configured in the Foundry project
 
 ## Environment Configuration

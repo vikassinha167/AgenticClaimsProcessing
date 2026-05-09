@@ -40,7 +40,6 @@ class CriticAgent:
             issues=issues,
             reviewer_notes=response,
         )
-        # await self.foundry.log_trace(decision_result.claim_id, "critic_review", critic.dict())
         return critic
 
     def _build_prompt(self, decision_result: DecisionResult, trace: dict[str, object]) -> str:

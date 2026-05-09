@@ -40,27 +40,21 @@ class ClaimsOrchestrator:
 
         extraction = await self.extraction_agent.extract(claim_payload)
         trace["extraction"] = extraction.dict(exclude_none=True)
-        # await self.foundry.log_trace(claim_payload.claim_id, "extraction", extraction.dict())
 
         coding = await self.coding_agent.map_codes(extraction)
         trace["coding"] = coding.dict(exclude_none=True)
-        # await self.foundry.log_trace(claim_payload.claim_id, "coding", coding.dict())
 
         validation = await self.validation_agent.validate(coding)
         trace["validation"] = validation.dict(exclude_none=True)
-        # await self.foundry.log_trace(claim_payload.claim_id, "validation", validation.dict())
 
         fraud = await self.fraud_agent.assess(coding, validation)
         trace["fraud"] = fraud.dict(exclude_none=True)
-        # await self.foundry.log_trace(claim_payload.claim_id, "fraud", fraud.dict())
 
         decision = await self.decision_agent.decide(coding, validation, fraud)
         trace["decision"] = decision.dict(exclude_none=True)
-        # await self.foundry.log_trace(claim_payload.claim_id, "decision", decision.dict())
 
         critic = await self.critic_agent.review(decision, trace)
         trace["critic"] = critic.dict(exclude_none=True)
-        # await self.foundry.log_trace(claim_payload.claim_id, "critic", critic.dict())
 
         evaluation = await self.evaluator.evaluate(claim_payload.claim_id, trace)
         trace["evaluation"] = evaluation.dict()
