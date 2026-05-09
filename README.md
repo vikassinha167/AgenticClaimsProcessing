@@ -12,10 +12,10 @@ The system is intended for engineering and instructional use, with a clean folde
 - Extracts structured claim data via document intelligence.
 - Maps services to ICD/CPT codes using Foundry-hosted GPT-4o reasoning.
 - Validates claims against MCP-served policy rules and constraints.
-- Detects fraud with a hybrid approach using Search-based retrieval and an external fraud scoring API.
+- Detects fraud through an external fraud scoring API.
 - Makes a final decision: Approve, Reject, or Flag for Review.
 - Reviews quality and safety through Foundry Guardrails.
-- Logs traces and stores evaluation metrics in Azure AI Foundry.
+- Logs traces and stores results in an Output folder.
 
 ## Architecture
 
