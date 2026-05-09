@@ -31,7 +31,7 @@ class EvaluationPipeline:
             f"Evaluate the claim processing workflow for claim {claim_id}. "
             "Provide groundedness, relevance, safety, and fraud confidence as numeric values between 0.0 and 1.0. "
             f"Use the internal trace: {trace}.\n"
-            "Return JSON object with keys groundedness, relevance, safety, fraud_confidence."
+            "Return JSON object with keys groundedness, relevance, safety, fraud_confidence. No need to include explanations or any text outside these keys in the JSON."
         )
 
     def _parse_response(self, response: str) -> dict[str, Any]:
@@ -52,6 +52,6 @@ class EvaluationPipeline:
                 "safety": float(payload.get("safety", 0.0)),
                 "fraud_confidence": float(payload.get("fraud_confidence", 0.0)),
             }
-        except Exception:
-            self.logger.warning("Failed to parse evaluation response; using defaults")
+        except Exception as ex:
+            self.logger.warning("Failed to parse evaluation response; using defaults: %s", ex)
             return {"groundedness": 0.75, "relevance": 0.8, "safety": 0.9, "fraud_confidence": 0.5}

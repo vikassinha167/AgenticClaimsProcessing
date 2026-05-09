@@ -25,7 +25,7 @@ async def main() -> None:
 
     evaluator = EvaluationPipeline(settings)
     evaluation = await evaluator.evaluate(claim_id=claim["claim_id"], trace={"sample": claim})
-    logger.info("Evaluation results: %s", evaluation.json(indent=2))
+    logger.info("Evaluation results: %s", evaluation)
 
 
 if __name__ == "__main__":

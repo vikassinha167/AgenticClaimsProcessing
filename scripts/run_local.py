@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import asyncio
-import json
+import json, os
 import logging
 import sys
 from pathlib import Path
@@ -30,5 +30,23 @@ async def main() -> None:
     logger.info("Final decision: %s", result.decision)
     logger.info("Decision trace: %s", json.dumps(result.trace, indent=2))
 
+    # -------------------------------
+    # Save JSON to Output folder
+    # -------------------------------
+
+    # Create Output directory if it doesn't exist
+    output_dir = "Output"
+    os.makedirs(output_dir, exist_ok=True)
+
+    # Create a safe filename
+    file_name = f"{result.claim_id}_{result.decision}.json"
+    file_path = os.path.join(output_dir, file_name)
+
+    # Write JSON to file
+    with open(file_path, "w", encoding="utf-8") as f:
+        json.dump(result.model_dump(mode="json"), f, indent=2, default=str)
+
+    print(f"\n JSON saved to: {file_path}")
+    
 if __name__ == "__main__":
     asyncio.run(main())

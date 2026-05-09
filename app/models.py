@@ -94,5 +94,4 @@ class EvaluationMetrics(BaseModel):
     relevance: float
     safety: float
     fraud_confidence: float
-    created_at: datetime = Field(default_factory=datetime.utcnow)
     metadata: Dict[str, Any] = {}

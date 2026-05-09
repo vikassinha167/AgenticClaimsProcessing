@@ -63,7 +63,6 @@ class ClaimsOrchestrator:
         # await self.foundry.log_trace(claim_payload.claim_id, "critic", critic.dict())
 
         evaluation = await self.evaluator.evaluate(claim_payload.claim_id, trace)
-        await self.foundry.store_evaluation(claim_payload.claim_id, evaluation.dict())
         trace["evaluation"] = evaluation.dict()
 
         self.logger.info("Completed claim orchestration for %s", claim_payload.claim_id)
