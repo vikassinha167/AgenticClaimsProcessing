@@ -5,7 +5,7 @@ pydantic
 openai>=1.40.0
 azure-ai-projects>=1.0.0b5
 azure-ai-evaluation>=1.0.0
-azure-ai-document-intelligence>=1.0.0
+azure-ai-documentintelligence
 azure-search-documents>=11.0.0
 azure-identity>=1.15.0
 azure-keyvault-secrets>=4.9.0
