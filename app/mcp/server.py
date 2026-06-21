@@ -2,12 +2,20 @@ from __future__ import annotations
 
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
-
+from fastapi_mcp import FastApiMCP
+from fastapi.middleware.cors import CORSMiddleware
 from app.mcp.policies import DEFAULT_POLICY
 from app.mcp.schemas import FraudScoreRequest, FraudScoreResponse, PolicyBundle
 
 app = FastAPI(title="MCP Policy Server", version="1.0.0")
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/policies", response_model=PolicyBundle)
 def get_policies() -> PolicyBundle:
@@ -73,7 +81,9 @@ def fraud_score(request: FraudScoreRequest) -> FraudScoreResponse:
         reason=reason,
     )
 
-
 @app.get("/health")
 def health() -> JSONResponse:
     return JSONResponse(content={"status": "ok"})
+
+mcp = FastApiMCP(app, name="MCP Policy Server", description="Healthcare Claims Processing MCP Policy Server")
+mcp.mount_http()

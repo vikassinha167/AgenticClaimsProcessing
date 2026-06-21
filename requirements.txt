@@ -1,5 +1,6 @@
 fastapi>=0.108.0
 uvicorn[standard]>=0.24.0
+fastapi_mcp>=0.4.0
 pydantic
 # ---- Azure AI Foundry / OpenAI ----
 openai>=1.40.0

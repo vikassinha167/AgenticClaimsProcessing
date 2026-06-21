@@ -318,3 +318,48 @@ python scripts/eval_run.py
 - [ ] Register agents in Foundry
 - [ ] Execute claim orchestration
 - [ ] Review Foundry trace and evaluation output
+
+### Steps to test MCP server via MCP Inspector through CLI - 
+
+When you run, run_mcp , it runs your Fast API MCP app on your localhost which is forwarded to a Git hub external host by default (when using Github Codespace).
+
+Make sure the port, 8000 is set to "Public" under "Ports" in the terminal for "Visibility" feature.
+
+1. Install MCP inspector by running following command in bash terminal
+
+npm install -g @modelcontextprotocol/inspector
+
+2. Once installed, run following terminal command to list all Tools of MCP server - 
+
+Please note for all the below URL, you may also replace your localhost with auto-forwarded address as well.
+In this case, 
+http://127.0.0.1:8000 (local)
+has corrosponding following forwaded address:
+https://urban-disco-g4g7wppxr673pw79-8000.app.github.dev/
+
+
+mcp-inspector http://127.0.0.1:8000/mcp --cli --transport http --method tools/list
+
+OR 
+
+mcp-inspector https://urban-disco-g4g7wppxr673pw79-8000.app.github.dev/mcp --cli --transport http --method tools/list
+
+3. Call the tool - 
+
+mcp-inspector http://127.0.0.1:8000/mcp --cli --transport http --method tools/call --tool-name get_policies_policies_get
+
+mcp-inspector http://127.0.0.1:8000/mcp --cli --transport http --method tools/call --tool-name get_constraints_constraints_get
+
+mcp-inspector http://127.0.0.1:8000/mcp --cli --transport http --method tools/call --tool-name get_allowed_procedures_allowed_procedures_get
+
+mcp-inspector http://127.0.0.1:8000/mcp --cli --transport http --method tools/call --tool-name fraud_score_fraud_score_post --tool-arg claim_id=CLAIM-1001 --tool-arg items='[{"procedure_code":"99213","amount":120.0,"provider":"P-12345", "diagnosis": "Liver Culture"}]'
+
+
+### Steps to test MCP server via MCP Inspector UI - 
+Open a second terminal and run:
+
+mcp-inspector --transport http --server-url https://urban-disco-g4g7wppxr673pw79-8000.app.github.dev/mcp
+
+If the above command errors out with busy port, run below command - 
+
+CLIENT_PORT=6275 SERVER_PORT=6278 mcp-inspector --transport http --server-url http://127.0.0.1:8000/mcp
